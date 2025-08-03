@@ -8,6 +8,7 @@ public class DocreviewApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DocreviewApplication.class, args);
+        System.out.println("Application Started");
     }
 
 }
