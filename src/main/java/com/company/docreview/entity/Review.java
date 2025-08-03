@@ -1,4 +1,4 @@
-package com.company.docreview.model;
+package com.company.docreview.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

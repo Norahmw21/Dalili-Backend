@@ -1,4 +1,4 @@
-package com.company.docreview.model;
+package com.company.docreview.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
