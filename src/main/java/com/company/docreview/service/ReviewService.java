@@ -1,5 +1,6 @@
 package com.company.docreview.service;
 
+import com.company.docreview.dto.ReviewDTO;
 import com.company.docreview.entity.Doctor;
 import com.company.docreview.entity.Review;
 import com.company.docreview.entity.User;
@@ -24,19 +25,37 @@ public class ReviewService {
     private final DoctorRepository doctorRepository;
 
     //Fetches all reviews written for a specific doctor.
-    public List<Review> getReviewsByDoctor(Long doctorId) {
-        return reviewRepository.findAllByDoctorId(doctorId);
+    public List<ReviewDTO> getReviewsByDoctor(Long doctorId) {
+        List<Review> reviews = reviewRepository.findAllByDoctorId(doctorId);
+        return reviews.stream()
+                .map(review -> new ReviewDTO(
+                        review.getId(),
+                        review.getComment(),
+                        review.getOverallRating(),
+                        review.getCreatedAt(),
+                        review.getDoctor().getName(),
+                        review.getUser().getName()     // show user who submitted the review
+                ))
+                .toList();
     }
-   //Fetches all reviews submitted by a specific user.
-    public List<Review> getReviewsByUser(Long userId) {
-        return reviewRepository.findAllByUserId(userId);
+
+    //Fetches all reviews submitted by a specific user.
+
+    public List<ReviewDTO> getReviewsByUser(Long userId) {
+        List<Review> reviews = reviewRepository.findAllByUserId(userId);
+        return reviews.stream()
+                .map(review -> new ReviewDTO(
+                        review.getId(),
+                        review.getComment(),
+                        review.getOverallRating(),
+                        review.getCreatedAt(),
+                        review.getDoctor().getName(),
+                        review.getUser().getName()
+                ))
+                .toList();
     }
-    //Finds a review by ID.
-    public Review getReviewById(Long reviewId) {
-        return reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new EntityNotFoundException("Review not found"));
-    }
-   //Add a new review.
+
+    //Add a new review.
     @Transactional
     public Review addReview(Long doctorId, Long userId, BigDecimal rating, String comment) {
         //Prevents duplicate reviews from the same user for the same doctor.

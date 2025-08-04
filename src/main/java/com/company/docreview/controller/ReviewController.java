@@ -1,5 +1,6 @@
 package com.company.docreview.controller;
 
+import com.company.docreview.dto.ReviewDTO;
 import com.company.docreview.entity.Review;
 import com.company.docreview.service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/reviews") //Base URL for all methods in this controller.
+@RequestMapping("/api/reviews")
 @RequiredArgsConstructor
 public class ReviewController {
 
@@ -19,15 +20,17 @@ public class ReviewController {
 
     //Calls the service to get all reviews for that doctor
     @GetMapping("/doctor/{doctorId}")
-    public ResponseEntity<List<Review>> getReviewsByDoctor(@PathVariable Long doctorId) {
+    public ResponseEntity<List<ReviewDTO>> getReviewsByDoctor(@PathVariable Long doctorId) {
         return ResponseEntity.ok(reviewService.getReviewsByDoctor(doctorId));
     }
 
+
     //Calls the service to returns reviews submitted by a specific user.
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Review>> getReviewsByUser(@PathVariable Long userId) {
+    public ResponseEntity<List<ReviewDTO>> getReviewsByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(reviewService.getReviewsByUser(userId));
     }
+
 
     //Receives JSON input from the frontend
     @PostMapping
