@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @Table(name = "reviews")
 public class Review {
     @Id
-    @ColumnDefault("nextval('reviews_review_id_seq')")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id", nullable = false)
     private Long id;
 

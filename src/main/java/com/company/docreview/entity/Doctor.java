@@ -1,9 +1,6 @@
 package com.company.docreview.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,7 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "doctors")
 public class Doctor {
     @Id
-    @ColumnDefault("nextval('doctors_doctor_id_seq')")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "doctor_id", nullable = false)
     private Long id;
 
