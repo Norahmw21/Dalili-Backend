@@ -36,4 +36,30 @@ public class DoctorService {
         }
         return false;
     }
+
+    /**
+     * Searches for doctors based on multiple criteria.
+     *
+     * @param name      The name of the doctor (partial match, case-insensitive).
+     * @param specialty The specialty of the doctor (partial match, case-insensitive).
+     * @param minRating The minimum average rating.
+     * @return A list of doctors matching the criteria.
+     */
+    public List<Doctor> searchDoctors(String name, String specialty, Double minRating) {
+        // Simple and flexible way to handle various combinations of search criteria
+        // In a real-world scenario, you might use a Specification or a more complex dynamic query builder.
+        if (name != null && specialty != null && minRating != null) {
+            return doctorRepository.findByNameAndSpecialtyAndAverageRating(name, specialty, minRating);
+        } else if (name != null && specialty != null) {
+            return doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyContainingIgnoreCase(name, specialty);
+        } else if (minRating != null) {
+            return doctorRepository.findByAverageRatingGreaterThanEqual(minRating);
+        } else if (name != null) {
+            return doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyContainingIgnoreCase(name, "");
+        } else if (specialty != null) {
+            return doctorRepository.findByNameContainingIgnoreCaseAndSpecialtyContainingIgnoreCase("", specialty);
+        } else {
+            return doctorRepository.findAll();
+        }
+    }
 }

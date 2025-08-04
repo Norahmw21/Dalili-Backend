@@ -48,4 +48,17 @@ public class DoctorController {
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Doctor>> searchDoctors(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String specialty,
+            @RequestParam(required = false) Double minRating) {
+
+        List<Doctor> doctors = doctorService.searchDoctors(name, specialty, minRating);
+        if (doctors.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(doctors, HttpStatus.OK);
+    }
 }
