@@ -47,7 +47,6 @@ public class DoctorService {
      */
     public List<Doctor> searchDoctors(String name, String specialty, Double minRating) {
         // Simple and flexible way to handle various combinations of search criteria
-        // In a real-world scenario, you might use a Specification or a more complex dynamic query builder.
         if (name != null && specialty != null && minRating != null) {
             return doctorRepository.findByNameAndSpecialtyAndAverageRating(name, specialty, minRating);
         } else if (name != null && specialty != null) {
