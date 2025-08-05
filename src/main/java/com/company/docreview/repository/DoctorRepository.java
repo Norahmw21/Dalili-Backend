@@ -35,24 +35,23 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
 
     @Query("""
-    SELECT new com.company.docreview.dto.DoctorWithHospitalDTO(
-      d.id, d.name, d.specialty, d.yearsOfExperience,
-      d.contactPhone, d.contactEmail, d.photoUrl,
-      h.id, h.name, h.latitude, h.longitude
-    )
-    FROM DoctorHospital dh
-    JOIN dh.doctor d
-    JOIN dh.hospital h
-    WHERE (:name IS NULL OR LOWER(d.name) LIKE LOWER(CONCAT('%', :name, '%')))
-    AND (:specialty IS NULL OR LOWER(d.specialty) LIKE LOWER(CONCAT('%', :specialty, '%')))
-    AND (:hospitalId IS NULL OR h.id = :hospitalId)
-    """)
+            SELECT new com.company.docreview.dto.DoctorWithHospitalDTO(
+              d.id, d.name, d.specialty, d.yearsOfExperience,
+              d.contactPhone, d.contactEmail, d.photoUrl,
+              h.id, h.name, h.latitude, h.longitude
+            )
+            FROM DoctorHospital dh
+            JOIN dh.doctor d
+            JOIN dh.hospital h
+            WHERE (:name IS NULL OR LOWER(d.name) LIKE LOWER(CONCAT('%', CAST(:name AS text), '%')))
+            AND (:specialty IS NULL OR LOWER(d.specialty) LIKE LOWER(CONCAT('%', CAST(:specialty AS text), '%')))
+            AND (:hospitalId IS NULL OR h.id = :hospitalId)
+            """)
     List<DoctorWithHospitalDTO> findDoctorsWithHospitals(
             @Param("name") String name,
             @Param("specialty") String specialty,
             @Param("hospitalId") Long hospitalId
     );
-
 
 
 }
