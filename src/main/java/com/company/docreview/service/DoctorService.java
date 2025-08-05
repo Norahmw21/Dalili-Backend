@@ -1,9 +1,11 @@
 package com.company.docreview.service;
 
+import com.company.docreview.dto.DoctorWithHospitalDTO;
 import com.company.docreview.entity.Doctor;
 import com.company.docreview.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +42,14 @@ public class DoctorService {
         }
         return false;
     }
+
+    public List<DoctorWithHospitalDTO> searchDoctorsWithHospital(String name, String specialty, Long hospitalId) {
+        String searchName = (name != null && !name.trim().isEmpty()) ? name.trim() : null;
+        String searchSpecialty = (specialty != null && !specialty.trim().isEmpty()) ? specialty.trim() : null;
+
+        return doctorRepository.findDoctorsWithHospitals(searchName, searchSpecialty, hospitalId);
+    }
+
 
     /**
      * Searches for doctors based on multiple criteria.

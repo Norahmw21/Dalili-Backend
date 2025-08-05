@@ -1,6 +1,7 @@
 package com.company.docreview.controller;
 
 
+import com.company.docreview.dto.DoctorWithHospitalDTO;
 import com.company.docreview.entity.Doctor;
 import com.company.docreview.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/doctors")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DoctorController {
 
     @Autowired
@@ -40,10 +42,25 @@ public class DoctorController {
         doctor.setId(id);
         return new ResponseEntity<>(doctorService.updateDoctor(doctor), HttpStatus.OK);
     }
+
     @GetMapping("/specialties")
     public ResponseEntity<List<String>> getAllSpecialties() {
         return new ResponseEntity<>(doctorService.getAllSpecialties(), HttpStatus.OK);
     }
+
+    @GetMapping("/search-with-hospital")
+    public ResponseEntity<List<DoctorWithHospitalDTO>> searchDoctorsWithHospital(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String specialty,
+            @RequestParam(required = false) Long hospitalId) {
+
+        List<DoctorWithHospitalDTO> result = doctorService.searchDoctorsWithHospital(name, specialty, hospitalId);
+        if (result.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {
