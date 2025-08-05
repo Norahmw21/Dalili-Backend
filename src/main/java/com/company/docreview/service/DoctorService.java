@@ -17,6 +17,10 @@ public class DoctorService {
         return doctorRepository.findAll();
     }
 
+    public List<String> getAllSpecialties() {
+        return doctorRepository.findDistinctSpecialties();
+    }
+
     public Optional<Doctor> getDoctorById(Long id) {
         return doctorRepository.findById(id);
     }

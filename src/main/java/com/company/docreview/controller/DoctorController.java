@@ -40,6 +40,10 @@ public class DoctorController {
         doctor.setId(id);
         return new ResponseEntity<>(doctorService.updateDoctor(doctor), HttpStatus.OK);
     }
+    @GetMapping("/specialties")
+    public ResponseEntity<List<String>> getAllSpecialties() {
+        return new ResponseEntity<>(doctorService.getAllSpecialties(), HttpStatus.OK);
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDoctor(@PathVariable Long id) {

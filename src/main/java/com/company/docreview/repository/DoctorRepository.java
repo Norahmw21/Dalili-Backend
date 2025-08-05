@@ -27,4 +27,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             @Param("minRating") double minRating
     );
 
+    @Query("SELECT DISTINCT d.specialty FROM Doctor d ORDER BY d.specialty")
+    List<String> findDistinctSpecialties();
+
 }
