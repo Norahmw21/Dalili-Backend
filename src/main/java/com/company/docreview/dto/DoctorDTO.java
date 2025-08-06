@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data//doctor dto
+@Data//doctor dtoo
 @NoArgsConstructor
 @AllArgsConstructor
 public class DoctorDTO {
