@@ -33,7 +33,7 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewsByUser(userId));
     }
 
-    @GetMapping("/all")
+    @GetMapping("/all")//to get all review for admin
     public ResponseEntity<List<ReviewDTO>> getAllReviews() {
         return ResponseEntity.ok(reviewService.getAllReviews());
     }
