@@ -43,7 +43,7 @@ public class DoctorController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}")//edited for id
     public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable Long id) {
         Optional<Doctor> doctorOptional = doctorService.getDoctorById(id);
 
