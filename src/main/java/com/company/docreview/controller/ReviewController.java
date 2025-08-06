@@ -65,7 +65,7 @@ public class ReviewController {
         reviewService.deleteReview(reviewId, userId);
         return ResponseEntity.noContent().build();
     }
-//    test comment
+//    test comment 00
 
 }
 
