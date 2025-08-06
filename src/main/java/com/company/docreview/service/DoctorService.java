@@ -43,6 +43,10 @@ public class DoctorService {
         return false;
     }
 
+    public List<DoctorWithHospitalDTO> getDoctorsWithHospitals() {
+        return doctorRepository.findDoctorsWithHospitals();
+    }
+
     public List<DoctorWithHospitalDTO> searchDoctorsWithHospital(String name, String specialty, Long hospitalId) {
         String searchName = (name != null && !name.trim().isEmpty()) ? name.trim() : null;
         String searchSpecialty = (specialty != null && !specialty.trim().isEmpty()) ? specialty.trim() : null;

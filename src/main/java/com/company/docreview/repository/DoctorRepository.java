@@ -52,6 +52,17 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             @Param("specialty") String specialty,
             @Param("hospitalId") Long hospitalId
     );
+    @Query("""
+    SELECT new com.company.docreview.dto.DoctorWithHospitalDTO(
+        d.id, d.name, d.specialty, d.yearsOfExperience,
+        d.contactPhone, d.contactEmail, d.photoUrl,
+        h.id, h.name, h.latitude, h.longitude
+    )
+    FROM DoctorHospital dh
+    JOIN dh.doctor d
+    JOIN dh.hospital h
+""")
+    List<DoctorWithHospitalDTO> findDoctorsWithHospitals();
 
 
 }
