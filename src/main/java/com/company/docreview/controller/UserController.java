@@ -1,7 +1,9 @@
 package com.company.docreview.controller;
 
+import com.company.docreview.dto.LoginRequestDTO;
 import com.company.docreview.entity.User;
 import com.company.docreview.service.UserService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +36,19 @@ public class UserController {
     @PostMapping
     public User createUser(@RequestBody User user) {
         return service.createUser(user);
+    }
+    // POST /api/users/login
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
+        Optional<User> user = service.getUserByEmailAndPassword(request.getEmail(), request.getPassword());
+
+        if (user.isPresent()) {
+            User safeUser = user.get();
+            safeUser.setPassword(null); // hide password in response
+            return ResponseEntity.ok(safeUser);
+        } else {
+            return ResponseEntity.status(401).body("Invalid email or password");
+        }
     }
 
     // PUT update existing user
