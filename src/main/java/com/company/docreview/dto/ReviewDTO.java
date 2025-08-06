@@ -18,4 +18,6 @@ public class ReviewDTO {
     private OffsetDateTime createdAt;
     private String doctorName;
     private String userName;
+    private Long userId; // ✅ Add this field
+
 }

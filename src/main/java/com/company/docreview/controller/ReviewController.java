@@ -14,6 +14,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5183")
+
 public class ReviewController {
 
     private final ReviewService reviewService;
@@ -31,6 +33,10 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.getReviewsByUser(userId));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<ReviewDTO>> getAllReviews() {
+        return ResponseEntity.ok(reviewService.getAllReviews());
+    }
 
     //Receives JSON input from the frontend
     @PostMapping
@@ -59,10 +65,9 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.updateReview(reviewId, userId, rating, comment));
     }
 
-    //Delete review
-    @DeleteMapping("/{reviewId}")
-    // Ensures the user is authorized to delete it.
-    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId, @RequestParam Long userId) {
+   //Delete review
+    @DeleteMapping("/{reviewId}/user/{userId}")
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId, @PathVariable Long userId) {
         reviewService.deleteReview(reviewId, userId);
         return ResponseEntity.noContent().build();
     }

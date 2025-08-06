@@ -24,15 +24,16 @@ public class HospitalService {
         return hospitalRepository.save(hospital);
     }
     public Hospital updateHospital(Long id, Hospital updatedHospital) {
-        return hospitalRepository.findById(id).map(hospital ->{
-            hospital.setName(hospital.getName());
-            hospital.setAddress(hospital.getAddress());
-            hospital.setLatitude(hospital.getLatitude());
-            hospital.setLongitude(hospital.getLongitude());
-            hospital.setWebsiteUrl(hospital.getWebsiteUrl());
+        return hospitalRepository.findById(id).map(hospital -> {
+            hospital.setName(updatedHospital.getName());
+            hospital.setAddress(updatedHospital.getAddress());
+            hospital.setLatitude(updatedHospital.getLatitude());
+            hospital.setLongitude(updatedHospital.getLongitude());
+            hospital.setWebsiteUrl(updatedHospital.getWebsiteUrl());
             return hospitalRepository.save(hospital);
-        } ).orElseThrow(() -> new RuntimeException("Hospital not found with id " + id));
+        }).orElseThrow(() -> new RuntimeException("Hospital not found with id " + id));
     }
+
     public void deleteHospital(Long id) {
         hospitalRepository.deleteById(id);
     }
