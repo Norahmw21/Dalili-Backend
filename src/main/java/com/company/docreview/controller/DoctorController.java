@@ -2,6 +2,7 @@ package com.company.docreview.controller;
 
 
 import com.company.docreview.dto.DoctorWithHospitalDTO;
+import com.company.docreview.dto.TopDoctorDto;
 import com.company.docreview.entity.Doctor;
 import com.company.docreview.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/doctors")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "*")
 public class DoctorController {
 
     @Autowired
@@ -81,5 +82,10 @@ public class DoctorController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(doctors, HttpStatus.OK);
+    }
+
+    @GetMapping("/top")
+    public ResponseEntity<List<TopDoctorDto>> getTopDoctors() {
+        return ResponseEntity.ok(doctorService.getTopDoctors());
     }
 }

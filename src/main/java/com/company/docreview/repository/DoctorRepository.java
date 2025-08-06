@@ -2,6 +2,7 @@ package com.company.docreview.repository;
 
 
 import com.company.docreview.dto.DoctorWithHospitalDTO;
+import com.company.docreview.dto.TopDoctorDto;
 import com.company.docreview.entity.Doctor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,17 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     // Custom query to find doctors by name and/or specialty
     List<Doctor> findByNameContainingIgnoreCaseAndSpecialtyContainingIgnoreCase(String name, String specialty);
 
+    @Query("""
+    SELECT new com.company.docreview.dto.TopDoctorDto(
+        d.id, d.name, d.specialty, d.photoUrl, AVG(r.overallRating)
+    )
+    FROM Doctor d
+    JOIN Review r ON d.id = r.doctor.id
+    GROUP BY d.id
+    ORDER BY AVG(r.overallRating) DESC
+""")
+    List<TopDoctorDto> findTopDoctors(Pageable pageable);
+
     // Custom query to find doctors with an average rating greater than or equal to a given value
     @Query("SELECT d FROM Doctor d JOIN Review r ON d.id = r.doctor.id GROUP BY d.id HAVING AVG(r.overallRating) >= :minRating")
     List<Doctor> findByAverageRatingGreaterThanEqual(@Param("minRating") double minRating);
@@ -30,7 +42,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             @Param("minRating") double minRating
     );
 
-    @Query("SELECT DISTINCT d.specialty FROM Doctor d ORDER BY d.specialty")
+    @Query("SELECT DISTINCT d.specialty FROM Doctor d WHERE d.specialty IS NOT NULL ORDER BY d.specialty")
     List<String> findDistinctSpecialties();
 
 

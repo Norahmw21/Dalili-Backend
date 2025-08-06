@@ -60,11 +60,11 @@ public class ReviewController {
     }
 
     //Delete review
-    @DeleteMapping("/{reviewId}")
-    // Ensures the user is authorized to delete it.
-    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId, @RequestParam Long userId) {
+    @DeleteMapping("/{reviewId}/user/{userId}")
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId, @PathVariable Long userId) {
         reviewService.deleteReview(reviewId, userId);
         return ResponseEntity.noContent().build();
     }
+
 }
 
