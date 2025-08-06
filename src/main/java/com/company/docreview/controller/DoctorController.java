@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/doctors")
+@RequestMapping("/doctors")//test
 @CrossOrigin(origins = "http://localhost:5173")
 public class DoctorController {
 
