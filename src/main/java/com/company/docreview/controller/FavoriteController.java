@@ -19,13 +19,13 @@ public class FavoriteController {
         this.service = service;
     }
 
-    // ✅ GET all favorites by user as DTO
+    //  GET all favorites by user as DTO
     @GetMapping("/user/{userId}")
     public List<FavoriteDTO> getFavoritesByUserId(@PathVariable Long userId) {
         return service.getFavoritesByUserId(userId);
     }
 
-    // ✅ POST add a favorite (still using entity)
+    //  POST add a favorite (still using entity)
     @PostMapping
     public FavoriteDTO addFavorite(@RequestBody Favorite favorite) {
         Favorite saved = service.addFavorite(favorite);
@@ -34,7 +34,7 @@ public class FavoriteController {
                 saved.getDoctor().getId()
         );
     }
-    // ✅ DELETE a favorite (still using ID)
+    //  DELETE a favorite (still using ID)
     @DeleteMapping
     public void deleteFavorite(@RequestBody FavoriteId id) {
         service.removeFavorite(id);
