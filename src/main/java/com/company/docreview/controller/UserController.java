@@ -1,12 +1,14 @@
 package com.company.docreview.controller;
 
 import com.company.docreview.dto.LoginRequestDTO;
+import com.company.docreview.dto.UserDTO;
 import com.company.docreview.entity.User;
 import com.company.docreview.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,18 +39,28 @@ public class UserController {
     public User createUser(@RequestBody User user) {
         return service.createUser(user);
     }
-    // POST /api/users/login
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequestDTO request) {
-        Optional<User> user = service.getUserByEmailAndPassword(request.getEmail(), request.getPassword());
+        Optional<User> userOpt = service.getUserByEmail(request.getEmail());
 
-        if (user.isPresent()) {
-            User safeUser = user.get();
-            safeUser.setPassword(null); // hide password in response
-            return ResponseEntity.ok(safeUser);
-        } else {
-            return ResponseEntity.status(401).body("Invalid email or password");
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(401).body(Map.of("message", "No account found with this email"));
         }
+
+        User user = userOpt.get();
+
+        if (!user.getPassword().equals(request.getPassword())) {
+            return ResponseEntity.status(401).body(Map.of("message", "Incorrect password"));
+        }
+
+        UserDTO response = new UserDTO(
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
+                user.getRole()
+        );
+
+        return ResponseEntity.ok(response);
     }
 
     // PUT update existing user
