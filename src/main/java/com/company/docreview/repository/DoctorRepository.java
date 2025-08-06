@@ -49,7 +49,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query("""
             SELECT new com.company.docreview.dto.DoctorWithHospitalDTO(
               d.id, d.name, d.specialty, d.yearsOfExperience,
-              d.contactPhone, d.contactEmail, d.photoUrl,
+              d.contactPhone, d.contactEmail, d.photoUrl,d.bio, d.experience,
+                                                         
               h.id, h.name, h.latitude, h.longitude
             )
             FROM DoctorHospital dh
@@ -67,7 +68,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     @Query("""
     SELECT new com.company.docreview.dto.DoctorWithHospitalDTO(
         d.id, d.name, d.specialty, d.yearsOfExperience,
-        d.contactPhone, d.contactEmail, d.photoUrl,
+        d.contactPhone, d.contactEmail, d.photoUrl,d.bio, d.experience,
+                                                   
         h.id, h.name, h.latitude, h.longitude
     )
     FROM DoctorHospital dh

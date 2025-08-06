@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 @Setter
 
 public class DoctorWithHospitalDTO {
+
     private Long doctorId;
     private String doctorName;
     private String specialty;
@@ -20,7 +21,8 @@ public class DoctorWithHospitalDTO {
     private String contactPhone;
     private String contactEmail;
     private String photoUrl;
-
+    private String bio;
+    private String experience;
     private Long hospitalId;
     private String hospitalName;
     private BigDecimal latitude;
@@ -28,7 +30,7 @@ public class DoctorWithHospitalDTO {
 
     public DoctorWithHospitalDTO(
             Long doctorId, String doctorName, String specialty, int yearsOfExperience,
-            String contactPhone, String contactEmail, String photoUrl,
+            String contactPhone, String contactEmail, String photoUrl,String bio, String experience,
             Long hospitalId, String hospitalName, BigDecimal latitude, BigDecimal longitude
     ) {
         this.doctorId = doctorId;
@@ -38,6 +40,8 @@ public class DoctorWithHospitalDTO {
         this.contactPhone = contactPhone;
         this.contactEmail = contactEmail;
         this.photoUrl = photoUrl;
+        this.bio = bio;
+        this.experience = experience;
         this.hospitalId = hospitalId;
         this.hospitalName = hospitalName;
         this.latitude = latitude;
