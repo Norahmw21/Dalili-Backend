@@ -15,6 +15,10 @@ public class UserService {
     public UserService(UserRepository repo) {
         this.repo = repo;
     }
+    public Optional<User> getUserByEmail(String email) {
+        return repo.findByEmail(email);
+    }
+
     public Optional<User> getUserByEmailAndPassword(String email, String password) {
         return repo.findByEmailAndPassword(email, password);
     }
