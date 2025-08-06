@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/hospitals")
+@CrossOrigin(origins = "http://localhost:5183")
 public class HospitalController {
     private HospitalService hospitalService;
     public HospitalController(HospitalService hospitalService) {
@@ -38,4 +39,10 @@ public class HospitalController {
             return ResponseEntity.notFound().build();
         }
     }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteHospital(@PathVariable Long id) {
+        hospitalService.deleteHospital(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

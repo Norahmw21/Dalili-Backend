@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,10 +35,26 @@ public class ReviewService {
                         review.getOverallRating(),
                         review.getCreatedAt(),
                         review.getDoctor().getName(),
-                        review.getUser().getName()     // show user who submitted the review
+                        review.getUser().getName() ,    // show user who submitted the review
+                        review.getUser().getId()
                 ))
                 .toList();
     }
+    public List<ReviewDTO> getAllReviews() {
+        return reviewRepository.findAll()
+                .stream()
+                .map(review -> new ReviewDTO(
+                review.getId(),
+                review.getComment(),
+                review.getOverallRating(),
+                review.getCreatedAt(),
+                review.getDoctor().getName(),
+                review.getUser().getName(), review.getUser().getId()
+        ))
+                // Adjust as per your DTO conversion
+                .collect(Collectors.toList());
+    }
+
 
     //Fetches all reviews submitted by a specific user.
 
@@ -50,7 +67,7 @@ public class ReviewService {
                         review.getOverallRating(),
                         review.getCreatedAt(),
                         review.getDoctor().getName(),
-                        review.getUser().getName()
+                        review.getUser().getName(),review.getUser().getId()
                 ))
                 .toList();
     }

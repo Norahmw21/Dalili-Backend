@@ -1,9 +1,12 @@
 package com.company.docreview.service;
 
 import com.company.docreview.dto.DoctorWithHospitalDTO;
+import com.company.docreview.dto.TopDoctorDto;
 import com.company.docreview.entity.Doctor;
 import com.company.docreview.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -52,6 +55,11 @@ public class DoctorService {
         String searchSpecialty = (specialty != null && !specialty.trim().isEmpty()) ? specialty.trim() : null;
 
         return doctorRepository.findDoctorsWithHospitals(searchName, searchSpecialty, hospitalId);
+    }
+
+    public List<TopDoctorDto> getTopDoctors() {
+        Pageable topFive = PageRequest.of(0, 5);
+        return doctorRepository.findTopDoctors(topFive);
     }
 
 

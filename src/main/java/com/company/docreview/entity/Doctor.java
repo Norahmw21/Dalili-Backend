@@ -3,7 +3,6 @@ package com.company.docreview.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -41,7 +40,6 @@ public class Doctor {
 
     @Column(name = "specialty", nullable = false, length = 50)
     private String specialty;
-
 
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DoctorHospital> doctorHospitals = new HashSet<>();
