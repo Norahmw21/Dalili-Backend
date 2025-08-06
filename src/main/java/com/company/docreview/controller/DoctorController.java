@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/doctors")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "http://localhost:5173")
 public class DoctorController {
 
     @Autowired
@@ -83,7 +83,6 @@ public class DoctorController {
         }
         return new ResponseEntity<>(doctors, HttpStatus.OK);
     }
-
     @GetMapping("/top")
     public ResponseEntity<List<TopDoctorDto>> getTopDoctors() {
         return ResponseEntity.ok(doctorService.getTopDoctors());
