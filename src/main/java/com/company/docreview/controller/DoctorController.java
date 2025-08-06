@@ -1,6 +1,7 @@
 package com.company.docreview.controller;
 
 
+import com.company.docreview.dto.DoctorDTO;
 import com.company.docreview.dto.DoctorWithHospitalDTO;
 import com.company.docreview.dto.TopDoctorDto;
 import com.company.docreview.entity.Doctor;
@@ -12,26 +13,62 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/doctors")//test
-@CrossOrigin(origins = "http://localhost:5173")
+@RequestMapping("/doctors")
+@CrossOrigin(origins = "http://localhost:5183")
 public class DoctorController {
 
     @Autowired
     private DoctorService doctorService;
+    @GetMapping("/all")
+    public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
+        List<Doctor> doctors = doctorService.getAllDoctors();
 
-    @GetMapping
-    public ResponseEntity<List<Doctor>> getAllDoctors() {
-        return new ResponseEntity<>(doctorService.getAllDoctors(), HttpStatus.OK);
+        List<DoctorDTO> doctorDTOs = doctors.stream()
+                .map(doc -> new DoctorDTO(
+                        doc.getId(),
+                        doc.getName(),
+                        doc.getBio(),
+                        doc.getPhotoUrl(),
+                        doc.getYearsOfExperience(),
+                        doc.getExperience(),
+                        doc.getContactPhone(),
+                        doc.getContactEmail(),
+                        doc.getSpecialty()
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(doctorDTOs);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Doctor> getDoctorById(@PathVariable Long id) {
-        Optional<Doctor> doctor = doctorService.getDoctorById(id);
-        return doctor.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
+    @GetMapping("/{id}")//edited for id
+    public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable Long id) {
+        Optional<Doctor> doctorOptional = doctorService.getDoctorById(id);
+
+        if (doctorOptional.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Doctor doc = doctorOptional.get();
+
+        DoctorDTO dto = new DoctorDTO(
+                doc.getId(),
+                doc.getName(),
+                doc.getBio(),
+                doc.getPhotoUrl(),
+                doc.getYearsOfExperience(),
+                doc.getExperience(),
+                doc.getContactPhone(),
+                doc.getContactEmail(),
+                doc.getSpecialty()
+        );
+
+        return ResponseEntity.ok(dto);
     }
+
 
     @PostMapping
     public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
@@ -42,6 +79,14 @@ public class DoctorController {
     public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
         doctor.setId(id);
         return new ResponseEntity<>(doctorService.updateDoctor(doctor), HttpStatus.OK);
+    }
+    @GetMapping("/with-hospitals")//for admin mangment
+    public ResponseEntity<List<DoctorWithHospitalDTO>> getDoctorsWithHospitals() {
+        List<DoctorWithHospitalDTO> doctorsWithHospitals = doctorService.getDoctorsWithHospitals();
+        if (doctorsWithHospitals.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(doctorsWithHospitals, HttpStatus.OK);
     }
 
     @GetMapping("/specialties")
@@ -88,3 +133,4 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.getTopDoctors());
     }
 }
+
