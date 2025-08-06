@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/doctors")
-@CrossOrigin(origins = "http://localhost:5183")
+@CrossOrigin(origins = "http://localhost:5175/")
 public class DoctorController {
 
     @Autowired
@@ -79,7 +79,7 @@ public class DoctorController {
         doctor.setId(id);
         return new ResponseEntity<>(doctorService.updateDoctor(doctor), HttpStatus.OK);
     }
-    @GetMapping("/with-hospitals")//for admin mangment
+    @GetMapping("/with-hospitals") //for admin mangment
     public ResponseEntity<List<DoctorWithHospitalDTO>> getDoctorsWithHospitals() {
         List<DoctorWithHospitalDTO> doctorsWithHospitals = doctorService.getDoctorsWithHospitals();
         if (doctorsWithHospitals.isEmpty()) {
