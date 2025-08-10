@@ -1,6 +1,3 @@
-<p align="center">
-  <img src="./src/assets/logo.png" alt="Dalili Logo" width="150" />
-</p>
 
 # Dalili – Doctor Finder & Review Platform
 
