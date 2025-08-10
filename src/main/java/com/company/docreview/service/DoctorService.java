@@ -46,6 +46,7 @@ public class DoctorService {
         return false;
     }
 
+
     public List<DoctorWithHospitalDTO> getDoctorsWithHospitals() {
         return doctorRepository.findDoctorsWithHospitals();
     }

@@ -46,6 +46,8 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     List<String> findDistinctSpecialties();
 
 
+
+
     @Query("""
             SELECT DISTINCT new com.company.docreview.dto.DoctorWithHospitalDTO(
               d.id, d.name, d.specialty, d.yearsOfExperience,

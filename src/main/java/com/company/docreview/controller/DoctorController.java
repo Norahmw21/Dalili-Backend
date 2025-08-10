@@ -1,7 +1,7 @@
 package com.company.docreview.controller;
 
 
-import com.company.docreview.dto.DoctorDTO;
+
 import com.company.docreview.dto.DoctorWithHospitalDTO;
 import com.company.docreview.entity.Doctor;
 import com.company.docreview.service.DoctorService;
@@ -22,52 +22,23 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
     @GetMapping("/all")
-    public ResponseEntity<List<DoctorDTO>> getAllDoctors() {
-        List<Doctor> doctors = doctorService.getAllDoctors();
-
-        List<DoctorDTO> doctorDTOs = doctors.stream()
-                .map(doc -> new DoctorDTO(
-                        doc.getId(),
-                        doc.getName(),
-                        doc.getBio(),
-                        doc.getPhotoUrl(),
-                        doc.getYearsOfExperience(),
-                        doc.getExperience(),
-                        doc.getContactPhone(),
-                        doc.getContactEmail(),
-                        doc.getSpecialty()
-                ))
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(doctorDTOs);
-    }
-
-
-    @GetMapping("/{id}")//edited for id
-    public ResponseEntity<DoctorDTO> getDoctorById(@PathVariable Long id) {
-        Optional<Doctor> doctorOptional = doctorService.getDoctorById(id);
-
-        if (doctorOptional.isEmpty()) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<List<DoctorWithHospitalDTO>> getAllDoctors() {
+        List<DoctorWithHospitalDTO> doctorsWithHospitals = doctorService.getDoctorsWithHospitals();
+        if (doctorsWithHospitals.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        Doctor doc = doctorOptional.get();
-
-        DoctorDTO dto = new DoctorDTO(
-                doc.getId(),
-                doc.getName(),
-                doc.getBio(),
-                doc.getPhotoUrl(),
-                doc.getYearsOfExperience(),
-                doc.getExperience(),
-                doc.getContactPhone(),
-                doc.getContactEmail(),
-                doc.getSpecialty()
-        );
-
-        return ResponseEntity.ok(dto);
+        return new ResponseEntity<>(doctorsWithHospitals, HttpStatus.OK);
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<DoctorWithHospitalDTO> getDoctorById(@PathVariable Long id) {
+        return doctorService.getDoctorsWithHospitals().stream()
+                .filter(d -> d.getDoctorId().equals(id))
+                .findFirst()
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
 
     @PostMapping
     public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
