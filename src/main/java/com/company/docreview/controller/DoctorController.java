@@ -118,6 +118,7 @@ public class DoctorController {
     @GetMapping("/search")
     public ResponseEntity<List<Doctor>> searchDoctors(
             @RequestParam(required = false) String name,
+
             @RequestParam(required = false) String specialty,
             @RequestParam(required = false) Double minRating) {
 
