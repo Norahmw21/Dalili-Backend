@@ -20,14 +20,14 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     List<Doctor> findByNameContainingIgnoreCaseAndSpecialtyContainingIgnoreCase(String name, String specialty);
 
     @Query("""
-    SELECT new com.company.docreview.dto.TopDoctorDto(
-        d.id, d.name, d.specialty, d.photoUrl, AVG(r.overallRating)
-    )
-    FROM Doctor d
-    JOIN Review r ON d.id = r.doctor.id
-    GROUP BY d.id
-    ORDER BY AVG(r.overallRating) DESC
-""")
+                SELECT new com.company.docreview.dto.TopDoctorDto(
+                    d.id, d.name, d.specialty, d.photoUrl, AVG(r.overallRating)
+                )
+                FROM Doctor d
+                JOIN Review r ON d.id = r.doctor.id
+                GROUP BY d.id
+                ORDER BY AVG(r.overallRating) DESC
+            """)
     List<TopDoctorDto> findTopDoctors(Pageable pageable);
 
     // Custom query to find doctors with an average rating greater than or equal to a given value
@@ -47,35 +47,34 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
 
     @Query("""
-            SELECT new com.company.docreview.dto.DoctorWithHospitalDTO(
+            SELECT DISTINCT new com.company.docreview.dto.DoctorWithHospitalDTO(
               d.id, d.name, d.specialty, d.yearsOfExperience,
-              d.contactPhone, d.contactEmail, d.photoUrl,d.bio, d.experience,
-                                                         
+              d.contactPhone, d.contactEmail, d.photoUrl, d.bio, d.experience,
               h.id, h.name, h.latitude, h.longitude
             )
-            FROM DoctorHospital dh
-            JOIN dh.doctor d
-            JOIN dh.hospital h
-            WHERE (:name IS NULL OR LOWER(d.name) LIKE LOWER(CONCAT('%', CAST(:name AS text), '%')))
-            AND (:specialty IS NULL OR LOWER(d.specialty) LIKE LOWER(CONCAT('%', CAST(:specialty AS text), '%')))
-            AND (:hospitalId IS NULL OR h.id = :hospitalId)
+            FROM Doctor d
+            LEFT JOIN DoctorHospital dh ON dh.doctor = d
+            LEFT JOIN dh.hospital h
+            WHERE (:name IS NULL OR :name = '' OR LOWER(COALESCE(d.name, '')) LIKE LOWER(CONCAT('%', :name, '%')))
+              AND (:specialty IS NULL OR :specialty = '' OR LOWER(COALESCE(d.specialty, '')) LIKE LOWER(CONCAT('%', :specialty, '%')))
+              AND (:hospitalId IS NULL OR h.id = :hospitalId)
             """)
     List<DoctorWithHospitalDTO> findDoctorsWithHospitals(
             @Param("name") String name,
             @Param("specialty") String specialty,
             @Param("hospitalId") Long hospitalId
     );
+
     @Query("""
-    SELECT new com.company.docreview.dto.DoctorWithHospitalDTO(
-        d.id, d.name, d.specialty, d.yearsOfExperience,
-        d.contactPhone, d.contactEmail, d.photoUrl,d.bio, d.experience,
-                                                   
-        h.id, h.name, h.latitude, h.longitude
-    )
-    FROM DoctorHospital dh
-    JOIN dh.doctor d
-    JOIN dh.hospital h
-""")
+            SELECT DISTINCT new com.company.docreview.dto.DoctorWithHospitalDTO(
+              d.id, d.name, d.specialty, d.yearsOfExperience,
+              d.contactPhone, d.contactEmail, d.photoUrl, d.bio, d.experience,
+              h.id, h.name, h.latitude, h.longitude
+            )
+                        FROM Doctor d
+                        LEFT JOIN DoctorHospital dh ON dh.doctor = d
+                        LEFT JOIN dh.hospital h
+            """)
     List<DoctorWithHospitalDTO> findDoctorsWithHospitals();
 
 
