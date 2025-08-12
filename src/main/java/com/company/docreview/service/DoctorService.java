@@ -3,7 +3,12 @@ package com.company.docreview.service;
 import com.company.docreview.dto.DoctorWithHospitalDTO;
 import com.company.docreview.dto.TopDoctorDto;
 import com.company.docreview.entity.Doctor;
+import com.company.docreview.entity.DoctorHospital;
+import com.company.docreview.entity.DoctorHospitalId;
+import com.company.docreview.entity.Hospital;
+import com.company.docreview.repository.DoctorHospitalRepository;
 import com.company.docreview.repository.DoctorRepository;
+import com.company.docreview.repository.HospitalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +23,14 @@ public class DoctorService {
     @Autowired
     private DoctorRepository doctorRepository;
 
+    @Autowired
+    private HospitalRepository hospitalRepository;
+
+    @Autowired
+    private DoctorHospitalRepository doctorHospitalRepository;
+
+
+
     public List<Doctor> getAllDoctors() {
         return doctorRepository.findAll();
     }
@@ -30,10 +43,27 @@ public class DoctorService {
         return doctorRepository.findById(id);
     }
 
-    public Doctor createDoctor(Doctor doctor) {
-        return doctorRepository.save(doctor);
-    }
+    public Doctor createDoctor(Doctor doctor, Long hospitalId) {
+        Doctor savedDoctor = doctorRepository.save(doctor);
 
+        if (hospitalId != null) {
+            Hospital hospital = hospitalRepository.findById(hospitalId)
+                    .orElseThrow(() -> new RuntimeException("Hospital not found"));
+
+            DoctorHospital dh = new DoctorHospital();
+            DoctorHospitalId id = new DoctorHospitalId();
+            id.setDoctorId(savedDoctor.getId());
+            id.setHospitalId(hospital.getId());
+
+            dh.setId(id);
+            dh.setDoctor(savedDoctor);
+            dh.setHospital(hospital);
+
+            doctorHospitalRepository.save(dh);
+        }
+
+        return savedDoctor;
+    }
     public Doctor updateDoctor(Doctor doctor) {
         return doctorRepository.save(doctor);
     }

@@ -11,18 +11,23 @@ import java.util.Optional;
 @Service
 public class HospitalService {
     private final HospitalRepository hospitalRepository;
+
     public HospitalService(HospitalRepository hospitalRepository) {
         this.hospitalRepository = hospitalRepository;
     }
+
     public List<Hospital> getAllHospitals() {
         return hospitalRepository.findAll();
     }
+
     public Optional<Hospital> getHospitalById(Long id) {
         return hospitalRepository.findById(id);
     }
+
     public Hospital createHospital(Hospital hospital) {
         return hospitalRepository.save(hospital);
     }
+
     public Hospital updateHospital(Long id, Hospital updatedHospital) {
         return hospitalRepository.findById(id).map(hospital -> {
             hospital.setName(updatedHospital.getName());

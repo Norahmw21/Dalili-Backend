@@ -15,10 +15,10 @@ import java.util.Objects;
 public class DoctorHospitalId implements Serializable {
     private static final long serialVersionUID = 2054664126550165175L;
     @Column(name = "doctor_id", nullable = false)
-    private Integer doctorId;
+    private Long  doctorId;
 
     @Column(name = "hospital_id", nullable = false)
-    private Integer hospitalId;
+    private Long  hospitalId;
 
     @Override
     public boolean equals(Object o) {

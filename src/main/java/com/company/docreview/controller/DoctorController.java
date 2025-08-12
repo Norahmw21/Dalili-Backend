@@ -2,6 +2,7 @@ package com.company.docreview.controller;
 
 
 
+import com.company.docreview.dto.DoctorCreateRequest;
 import com.company.docreview.dto.DoctorWithHospitalDTO;
 import com.company.docreview.entity.Doctor;
 import com.company.docreview.service.DoctorService;
@@ -39,11 +40,24 @@ public class DoctorController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
-
     @PostMapping
-    public ResponseEntity<Doctor> createDoctor(@RequestBody Doctor doctor) {
-        return new ResponseEntity<>(doctorService.createDoctor(doctor), HttpStatus.CREATED);
+    public ResponseEntity<Doctor> createDoctor(@RequestBody DoctorCreateRequest req) {
+        Doctor d = new Doctor();
+        d.setName(req.getName());
+        d.setBio(req.getBio());
+        d.setPhotoUrl(req.getPhotoUrl());
+        d.setYearsOfExperience(req.getYearsOfExperience());
+        d.setExperience(req.getExperience());
+        d.setContactPhone(req.getContactPhone());
+        d.setContactEmail(req.getContactEmail());
+        d.setSpecialty(req.getSpecialty());
+
+        Doctor saved = doctorService.createDoctor(d, req.getHospitalId());
+        return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
+
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Doctor> updateDoctor(@PathVariable Long id, @RequestBody Doctor doctor) {
